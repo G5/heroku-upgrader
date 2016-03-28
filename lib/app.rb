@@ -29,7 +29,14 @@ module App
   end
 
   def pg_backups_schedule
-   puts "heroku pg:backups schedules for app".cyan
+    get_pg_url = "heroku pg:backups schedules -a #{@app_name}"
+    pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
+    if status.success?
+      puts "-=[Heroku pg:backups schedules for " + "#{@app_name}".cyan + "]=-"
+      puts pg_info.green
+    else
+      puts "Error: ".red + "#{stderr}"
+    end
   end
  
 end
