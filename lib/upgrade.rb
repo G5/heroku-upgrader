@@ -17,7 +17,7 @@ def main_menu
     when "1"
       get_app_name
     when "2"
-      database_upgrade_menu
+      @app_name.nil? ? (puts "Need an Appname") : database_upgrade_menu
     end
   end
   puts "Closing program"
