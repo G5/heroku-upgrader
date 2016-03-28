@@ -9,6 +9,7 @@ GEM
       tzinfo (~> 1.1)
     coderay (1.1.1)
     diff-lcs (1.2.5)
+    dotenv (0.10.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     i18n (0.7.0)
@@ -41,6 +42,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   factory_girl
   pry
   rspec
