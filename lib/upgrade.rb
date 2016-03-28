@@ -1,12 +1,14 @@
 Dir[File.join(Dir.pwd) + "**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
 include App
 require 'pry'
+require 'dotenv'
+Dotenv.load
 
 def main_menu
   choice = ""
   until choice == "x"
     puts "[= Heroku PG Upgrader Main Menu =]".blue.bold
-    @app_name.nil? ? (puts "(1) Enter App Name: ") : (puts "(1) Enter App Name (currently:#{@app_name})")
+    @app_name.nil? ? (puts "(1) Enter App Name: ") : (puts "(1) Enter App Name (currently:" + "#{@app_name})".cyan)
     puts "(2) [= Database Upgrade Menu =]"
     puts "(x) Exit "
     print "Enter choice: "
@@ -24,7 +26,7 @@ end
 def database_upgrade_menu
   choice = ""; clear_screen
   until choice == "x"
-    puts "[= Database Upgrade Menu =]".blue.bold
+    puts "[= Database Upgrade Menu =] ".blue.bold + "#{@app_name}".cyan 
     puts "(1) PG Info "
     puts "(2) pg:backups schedules "
     puts "(x) Exit "
