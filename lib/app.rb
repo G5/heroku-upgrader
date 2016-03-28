@@ -38,5 +38,19 @@ module App
       puts "Error: ".red + "#{stderr}"
     end
   end
- 
+
+ def create_addon
+  addon_choice = ""
+  puts "This creates the addon the current database will copy into and then this will get promoted:"
+  puts "Upgrade to " + "(B)".green + "asic $9/mo" + " OR " + "(S)".red + "tandard $50/mo"
+  addon_choice = gets.chomp.to_s.downcase
+  if addon_choice == "b"
+    addon_url = "heroku addons:create heroku-postgresql:hobby-dev -a #{@app_name}"
+  elsif addon_choice == "s"
+    addon_url = "heroku addons:create heroku-postgresql:hobby-dev -a #{@app_name}"
+  else
+    puts "Canceling create addon, invalid choice."
+  end
+ end
+
 end

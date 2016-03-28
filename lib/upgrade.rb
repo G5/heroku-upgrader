@@ -30,8 +30,9 @@ def database_upgrade_menu
   choice = ""; clear_screen
   until choice == "x"
     puts "[= Database Upgrade Menu =] ".blue.bold + "#{@app_name}".cyan 
-    puts "(1) PG Info "
-    puts "(2) pg:backups schedules "
+    puts "(1) pg:info"
+    puts "(2) pg:backups schedules"
+    puts "(3) create the addon"
     puts "(x) Exit "
     print "Enter choice: "
     choice = gets.chomp.to_s
@@ -40,6 +41,8 @@ def database_upgrade_menu
       pg_info
     when "2"
       pg_backups_schedule
+    when "3"
+      create_addon
     end
   end
   clear_screen
