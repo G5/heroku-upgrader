@@ -1,4 +1,5 @@
 Dir[File.join(Dir.pwd) + "**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
+include App
 
 def main_menu
   system("clear")
@@ -22,9 +23,5 @@ def main_menu
   puts "Closing program"
 end
 
-def get_app_name
-  print "App Name: "
-  @app_name = gets.chomp.to_s
-end
 
 main_menu
