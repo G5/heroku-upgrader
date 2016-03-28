@@ -1,4 +1,5 @@
 module App
+
   def get_app_name
     print "Enter App Name: "
     @app_name = gets.chomp.to_s
@@ -6,7 +7,10 @@ module App
   end
 
   def pg_info
-    puts "heroku pg info for app".cyan
+    get_pg = "heroku pg:info -a #{@app_name}"
+    pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg)}
+    puts "-=[Heroku pg info for #{@app_name}".cyan
+    puts pg_info 
   end
 
   def pg_backups_schedule

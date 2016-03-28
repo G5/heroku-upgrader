@@ -2,6 +2,9 @@ Dir[File.join(Dir.pwd) + "**/*.rb"].each { |file| require file if !file.include?
 include App
 require 'pry'
 require 'dotenv'
+require 'open3'
+require 'Bundler'
+
 Dotenv.load
 
 def main_menu
