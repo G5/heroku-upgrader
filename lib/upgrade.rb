@@ -1,3 +1,4 @@
+Dir[File.join(Dir.pwd) + "**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
 
 def main_menu
   system("clear")
@@ -20,3 +21,7 @@ def main_menu
   end
   puts "Closing program"
 end
+
+
+
+main_menu
