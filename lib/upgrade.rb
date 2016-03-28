@@ -14,7 +14,7 @@ def main_menu
     case choice
     when "1"
       get_app_name
-      status = "Getting App Name"
+      status = "Getting App Name #{@app_name}"
     else
       status = "Invalid Option"
     end
@@ -22,6 +22,9 @@ def main_menu
   puts "Closing program"
 end
 
-
+def get_app_name
+  print "App Name: "
+  @app_name = gets.chomp.to_s
+end
 
 main_menu
