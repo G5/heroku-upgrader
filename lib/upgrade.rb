@@ -42,7 +42,7 @@ def database_upgrade_menu
     when "2"
       pg_backups_schedule
     when "3"
-      create_addon
+      create_addon_choice
     end
   end
   clear_screen
