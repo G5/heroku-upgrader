@@ -68,6 +68,10 @@ module App
     end
   end 
 
+  def finalize_upgrade
+
+  end
+
   def open3_capture(url)
     capture_result, stderr, status = Bundler.with_clean_env {Open3.capture3(url)}
     return [capture_result, stderr, status]
