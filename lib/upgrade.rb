@@ -6,6 +6,8 @@ require 'open3'
 require 'Bundler'
 Dotenv.load
 
+@app_name = "mj-hub"
+
 def main_menu
   choice = ""
   until choice == "x"
@@ -29,7 +31,7 @@ def database_upgrade_menu
   choice = ""; clear_screen
   until choice == "x"
     puts "[= Database Upgrade Menu =] ".blue.bold + "#{@app_name}".cyan 
-    puts "(1) pg:info & pg:backups schedules"
+    puts "(1) view pg:info & pg:backups schedules"
     if @addon_color
       puts "(3) copy/promote " + "#{@addon_color}".cyan
     else
@@ -66,10 +68,6 @@ def create_addon_choice
     else
       puts "Canceling create addon, invalid choice."
     end
-end
-
-def copy_promote_addon
-  puts "copy promote addon!"
 end
 
 def clear_screen
