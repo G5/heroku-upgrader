@@ -37,7 +37,7 @@ def database_upgrade_menu
     else
       puts "(2) create addon"
     end
-    puts "(4) Finish Upgrade if 2/3 are done."
+    puts "(4) Finish Upgrade if new addon is copied/promoted."
     puts "(x) Exit "
     print "Enter choice: "
     choice = gets.chomp.to_s

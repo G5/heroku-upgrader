@@ -55,21 +55,29 @@ module App
     pg_copy = "heroku pg:copy DATABASE_URL #{@addon_color} --confirm #{@app_name}"
     pg_promote = "heroku pg:promote #{@addon_color} -a #{@app_name}"
 
-    puts "copying DATABASE_URL to new addon #{@addon_color} (this can be slow)...".green
+    puts "putting database in wait state...".green
+    open3_capture(wait)
+    puts "setting maintenance mode on #{@app_name}...".green
+    open3_capture(maintenance)
+    puts "copying DATABASE_URL to new addon #{@addon_color}...".green
     copy_result = open3_capture(pg_copy)
     if copy_result[0].include?("Copy completed")
-      puts "putting database in wait state...".green
-      open3_capture(wait)
-      puts "setting maintenance mode on #{@app_name}...".green
-      open3_capture(maintenance)
-      binding.pry
-      puts "promoting #{@addon_color} to DATABASE_URL..."
+      puts "promoting #{@addon_color} to DATABASE_URL...".green
       open3_capture(pg_promote)
     end
   end 
 
   def finalize_upgrade
-
+    maintenance = "heroku maintenance:off -a #{@app_name}"
+    schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
+    capture = "heroku pg:backups capture -a #{@app_name}" 
+    maint_result = open3_capture(maintenance)
+    puts maint_result[1].green
+    cap_result = open3_capture(schedule)
+    puts cap_result[0].green
+    sched_result = open3_capture(capture)
+    puts sched_result[0].green
+    puts "database upgrade complete.".cyan
   end
 
   def open3_capture(url)
