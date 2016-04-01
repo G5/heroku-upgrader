@@ -6,8 +6,6 @@ require 'open3'
 require 'Bundler'
 Dotenv.load
 
-@app_name = "mj-hub"
-
 def main_menu
   choice = ""
   until choice == "x"
