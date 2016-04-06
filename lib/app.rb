@@ -12,9 +12,12 @@ module App
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(join_url)}
     if status.success?
       puts "Joined #{@app_name} successfully".green
+      binding.pry
+      @state.joined = true
     else
       @app_name = nil
       puts "Error: ".red + "#{stderr}"
+      @state.joined(false)
     end
   end
 

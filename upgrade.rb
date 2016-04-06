@@ -5,6 +5,7 @@ require 'open3'
 require 'Bundler'
 include App
 Dotenv.load
+@state = State.new
 
 def main_menu
   choice = ""

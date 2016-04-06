@@ -1,11 +1,13 @@
 class State
 
+  attr_accessor :joined, :addon_created, :addon_copied, :addon_promoted, :schedule_created, :captured
+
   def initialize
 
   end
 
   def joined
-    @joined
+    @joined 
   end
 
   def addon_created
