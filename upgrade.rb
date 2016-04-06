@@ -1,9 +1,9 @@
+Dir[File.join(Dir.pwd) + "/lib/**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
 require 'pry'
-Dir[File.join(Dir.pwd) + "lib/**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
-include App
 require 'dotenv'
 require 'open3'
 require 'Bundler'
+include App
 Dotenv.load
 
 def main_menu
