@@ -11,8 +11,8 @@ def main_menu
   choice = ""
   until choice == "x"
     puts "[= Heroku PG Upgrader Main Menu =]".blue.bold
-    @app_name.nil? ? (puts "(1) enter heroku appname: ") : (puts "(1) change heroku appname " + "( " + "#{@app_name}".cyan + " )" )
-    puts "(2) [= database Upgrade Menu =]"
+    @state.joined ? (puts "(1) Change heroku appname " + "( " + "#{@app_name}".cyan + " )" ) : ( puts "(1) Enter heroku appname: ")  
+    puts "(2) [= DB Upgrade Menu =]" if @state.joined
     puts "(x) Exit "
     print "Enter choice: "
     choice = gets.chomp.to_s
@@ -20,7 +20,7 @@ def main_menu
     when "1"
       get_app_name
     when "2"
-      @app_name.nil? ? (puts "Need an Appname") : database_upgrade_menu
+      @app_name.nil? ? (puts "You need a valid Heroku appname") : database_upgrade_menu
     end
   end
   puts "Closing program"
@@ -30,13 +30,10 @@ def database_upgrade_menu
   choice = ""; clear_screen
   until choice == "x"
     puts "[= Database Upgrade Menu =] ".blue.bold + "#{@app_name}".cyan 
-    puts "(1) view pg:info & pg:backups schedules"
-    if @addon_color
-      puts "(3) copy/promote " + "#{@addon_color}".cyan
-    else
-      puts "(2) create addon"
-    end
-    puts "(4) Finish Upgrade if new addon is copied/promoted."
+    puts "(1) View " + "pg:info".green + " & " + "pg:backups schedules".green
+    puts "(2) Create new Addon" if  !@state.addon_created
+    puts "(3) Copy & Promote new Addon " + "#{@addon_color}".cyan if @state.addon_created && !@state.addon_promoted
+    puts "(4) Finish upgrade - Maintenance off/Make schedule/Capture backup" if @state.addon_promoted
     puts "(x) Exit "
     print "Enter choice: "
     choice = gets.chomp.to_s
@@ -45,10 +42,10 @@ def database_upgrade_menu
       pg_info
       pg_backups_schedule
     when "2"
-      create_addon_choice
+      create_addon_type
     when "3"
-      copy_promote_addon
-      puts "copy/promote completed."
+      addon_copy
+      addon_promote if @state.addon_created
       pg_info
     when "4"
       finalize_upgrade
@@ -58,7 +55,7 @@ def database_upgrade_menu
 end
 
 
-def create_addon_choice
+def create_addon_type
     choice = ""
     puts "This creates the addon the current database will copy into and then this will get promoted:"
     puts "Upgrade to " + "(B)".green + "asic $9/mo" + " OR " + "(S)".red + "tandard $50/mo"

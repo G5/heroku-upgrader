@@ -12,12 +12,11 @@ module App
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(join_url)}
     if status.success?
       puts "Joined #{@app_name} successfully".green
-      binding.pry
       @state.joined = true
     else
       @app_name = nil
       puts "Error: ".red + "#{stderr}"
-      @state.joined(false)
+      @state.joined = false
     end
   end
 
@@ -46,17 +45,17 @@ module App
   end
 
   def create_addon(addon_url)
-    puts "creating addon..."
+    puts "Creating new Addon..."
     addon_create, stderr, status = Bundler.with_clean_env {Open3.capture3(addon_url)}
     puts addon_create.to_s.green
     @addon_color = addon_create.slice(/HEROKU\w+/)
+    @state.addon_created = true
   end
 
-  def copy_promote_addon
+  def addon_copy
     wait = "heroku pg:wait -a #{@app_name}"
     maintenance = "heroku maintenance:on -a #{@app_name}"
     pg_copy = "heroku pg:copy DATABASE_URL #{@addon_color} --confirm #{@app_name}"
-    pg_promote = "heroku pg:promote #{@addon_color} -a #{@app_name}"
 
     puts "putting database in wait state...".green
     open3_capture(wait)
@@ -64,11 +63,15 @@ module App
     open3_capture(maintenance)
     puts "copying DATABASE_URL to new addon #{@addon_color}...".green
     copy_result = open3_capture(pg_copy)
-    if copy_result[0].include?("Copy completed")
-      puts "promoting #{@addon_color} to DATABASE_URL...".green
-      open3_capture(pg_promote)
-    end
+    copy_result[0].include?("Copy completed") ? (@state.addon_copied = true) : (puts "Addon copy failed.")
   end 
+
+  def addon_promote
+    pg_promote = "heroku pg:promote #{@addon_color} -a #{@app_name}"
+    open3_capture(pg_promote)
+    puts "promoting #{@addon_color} to DATABASE_URL...".green
+    @state.addon_promoted = true
+  end
 
   def finalize_upgrade
     maintenance = "heroku maintenance:off -a #{@app_name}"
