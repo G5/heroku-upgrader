@@ -77,6 +77,7 @@ module App
     maintenance = "heroku maintenance:off -a #{@app_name}"
     schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
     capture = "heroku pg:backups capture -a #{@app_name}" 
+
     maint_result = open3_capture(maintenance)
     puts maint_result[1].green
     cap_result = open3_capture(schedule)
@@ -84,6 +85,7 @@ module App
     sched_result = open3_capture(capture)
     puts sched_result[0].green
     puts "database upgrade complete.".cyan
+    @state.finalized = true
   end
 
   def open3_capture(url)

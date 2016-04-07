@@ -1,6 +1,6 @@
 class State
 
-  attr_accessor :joined, :addon_created, :addon_copied, :addon_promoted, :schedule_created, :captured
+  attr_accessor :joined, :addon_created, :addon_copied, :addon_promoted, :finalized
 
   def initialize
 
@@ -22,12 +22,8 @@ class State
     @addon_promoted
   end
 
-  def schedule_created
-    @schedule_created
-  end
-
-  def captured
-    @captured
+  def finalized
+    @finalized
   end
 
 end
