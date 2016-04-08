@@ -7,8 +7,11 @@ There are a few steps to run this:
 Clone the repository
 
 Heroku will need to authenticate, so you must setup your heroku account api token. Do this in the .env file in the \lib directory
--HEROKU_BIN_PATH=heroku
--HEROKU_AUTH_TOKEN=some_token
+This .env file is .gitignored, so it can not be pushed up into version control.
 
-To run the program navigate to lib and run the menu:
+lib/.env
+HEROKU_BIN_PATH=heroku
+HEROKU_AUTH_TOKEN=some_token
+
+To run the program navigate to \lib and run the menu:
 $ ruby upgrade.rb
