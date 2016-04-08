@@ -32,8 +32,8 @@ def database_upgrade_menu
     puts "[= Database Upgrade Menu =] ".blue.bold + "#{@app_name}".cyan 
     puts "(1) View " + "pg:info".green + " & " + "pg:backups schedules".green
     puts "(2) Create new Addon" if  !@state.addon_created
-    puts "(3) Copy & Promote new Addon " + "#{@addon_color}".cyan if @state.addon_created && !@state.addon_promoted
-    puts "(4) Finish upgrade - Maintenance off/Make schedule/Capture backup" if @state.addon_promoted && !@state.finalized
+    puts "(3) Copy & Promote (" + "pg:copy ".green + "&" + " pg:promote".green + ") new Addon " + "#{@addon_color}".cyan if @state.addon_created && !@state.addon_promoted
+    puts "(4) Finish upgrade - (" + "maintenance:off".green + " & " + "pg:backups capture/schedule".green + ")" if @state.addon_promoted && !@state.finalized
     puts "-== Upgrade is completed ==-".red if @state.finalized
     puts "(x) Exit "
     print "Enter choice: "

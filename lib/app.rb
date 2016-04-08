@@ -1,13 +1,14 @@
 module App
 
   def get_app_name
-    print "Enter App Name: "
+    @state = State.new
+    print "Enter app name: "
     @app_name = gets.chomp.to_s
     join_app
   end
 
   def join_app
-    puts "joining app..."
+    puts "Joining #{@app_name}..."
     join_url = "heroku join -a #{@app_name}"
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(join_url)}
     if status.success?
