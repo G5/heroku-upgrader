@@ -1,5 +1,4 @@
-require 'rspec'
-require 'state'
+require 'spec_helper'
 
 describe State do
 
