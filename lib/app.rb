@@ -44,6 +44,18 @@ module App
       puts "Error: ".red + "#{stderr}"
     end
   end
+  
+  def dyno_info
+    puts "getting dynos detail..."
+    get_pg_url = "heroku ps -a #{@app_name}"
+    pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
+    if status.success?
+      puts "-=[Heroku dynos for " + "#{@app_name}".cyan + "]=-"
+      puts pg_info.green
+    else
+      puts "Error: ".red + "#{stderr}"
+    end
+  end
 
   def create_addon(addon_url)
     puts "Creating new Addon..."

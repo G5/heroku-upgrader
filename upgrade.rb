@@ -42,6 +42,7 @@ def database_upgrade_menu
     when "1"
       pg_info
       pg_backups_schedule
+      dyno_info
     when "2"
       create_addon_type
     when "3"
