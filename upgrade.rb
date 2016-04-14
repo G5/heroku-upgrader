@@ -35,7 +35,7 @@ def database_upgrade_menu
     puts "(3) Copy & Promote (" + "pg:copy ".green + "&" + " pg:promote".green + ") new Addon " + "#{@addon_color}".cyan if @state.addon_created && !@state.addon_promoted
     puts "(4) Finish upgrade - (" + "maintenance:off".green + " & " + "pg:backups capture/schedule".green + ")" if @state.addon_promoted && !@state.finalized
     puts "-== Upgrade is completed ==-".red if @state.finalized
-    puts "(x) Exit "
+    puts "(x) Exit to Main Menu"
     print "Enter choice: "
     choice = gets.chomp.to_s
     case choice
