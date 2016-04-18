@@ -104,11 +104,12 @@ module App
       sched = schedule.slice(/HEROKU\w+/)
       pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3("heroku pg:backups unschedule #{sched} -a #{@app_name}")}
       if status.success?
-        puts "#{schedule} removed"     
+        puts "#{schedule}" + "Removed".green     
       else
         puts "Error: ".red + "#{stderr}"
       end
     end
+    schedule_and_capture
     get_schedules
   end
   
