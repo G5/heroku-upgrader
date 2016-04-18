@@ -104,7 +104,7 @@ module App
       sched = schedule.slice(/HEROKU\w+/)
       pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3("heroku pg:backups unschedule #{sched} -a #{@app_name}")}
       if status.success?
-        puts "#{schedule}" + "Removed".green     
+        puts "#{schedule} " + "Removed".green     
       else
         puts "Error: ".red + "#{stderr}"
       end
@@ -117,7 +117,7 @@ module App
     pg_schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
     pg_capture = "heroku pg:backups capture -a #{@app_name}" 
     sched_result = open3_capture(pg_schedule)
-    puts sched_result[0].green
+    puts "#{sched_result[0]}".green + " as" + " DATABASE_URL".green
     cap_result = open3_capture(pg_capture)
     puts cap_result[0].green
   end
