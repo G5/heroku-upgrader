@@ -32,19 +32,6 @@ module App
       puts "Error: ".red + "#{stderr}"
     end
   end
-
-  def get_schedules
-    puts "getting backup schedule(s)..."
-    get_pg_url = "heroku pg:backups schedules -a #{@app_name}"
-    pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
-    if status.success?
-      @schedules = pg_info.split("\n") ; @schedules.shift
-      puts "-=[Heroku pg:backups schedules for " + "#{@app_name}".cyan + "]=-"
-      @schedules.each { |s| puts s.green } ; puts ""     
-    else
-      puts "Error: ".red + "#{stderr}"
-    end
-  end
   
   def dyno_info
     puts "getting dynos detail..."
@@ -94,6 +81,19 @@ module App
     schedule_and_capture    
     puts "database upgrade complete.".cyan
     @state.finalized = true
+  end
+
+  def get_schedules
+    puts "getting backup schedule(s)..."
+    get_pg_url = "heroku pg:backups schedules -a #{@app_name}"
+    pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
+    if status.success?
+      @schedules = pg_info.split("\n") ; @schedules.shift
+      puts "-=[Heroku pg:backups schedules for " + "#{@app_name}".cyan + "]=-"
+      @schedules.each { |s| puts s.green } ; puts ""     
+    else
+      puts "Error: ".red + "#{stderr}"
+    end
   end
 
   def clean_schedules
