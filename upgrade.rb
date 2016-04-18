@@ -34,6 +34,7 @@ def database_upgrade_menu
     puts "(2) Create new Addon" if  !@state.addon_created
     puts "(3) Copy & Promote (" + "pg:copy ".green + "&" + " pg:promote".green + ") new Addon " + "#{@addon_color}".cyan if @state.addon_created && !@state.addon_promoted
     puts "(4) Finish upgrade - (" + "maintenance:off".green + " & " + "pg:backups capture/schedule".green + ")" if @state.addon_promoted && !@state.finalized
+    puts "(10) Clean Schedules"
     puts "-== Upgrade is completed ==-".red if @state.finalized
     puts "(x) Exit to Main Menu"
     print "Enter choice: "
@@ -41,7 +42,7 @@ def database_upgrade_menu
     case choice
     when "1"
       pg_info
-      pg_backups_schedule
+      get_schedules
       dyno_info
     when "2"
       create_addon_type
@@ -51,6 +52,8 @@ def database_upgrade_menu
       pg_info
     when "4"
       finalize_upgrade
+    when "10"
+      clean_schedules
     end
   end
   clear_screen

@@ -33,13 +33,14 @@ module App
     end
   end
 
-  def pg_backups_schedule
+  def get_schedules
     puts "getting backup schedule(s)..."
     get_pg_url = "heroku pg:backups schedules -a #{@app_name}"
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
     if status.success?
+      @schedules = pg_info.split("\n") ; @schedules.shift
       puts "-=[Heroku pg:backups schedules for " + "#{@app_name}".cyan + "]=-"
-      puts pg_info.green
+      @schedules.each { |s| puts s.green } ; puts ""     
     else
       puts "Error: ".red + "#{stderr}"
     end
@@ -88,17 +89,36 @@ module App
 
   def finalize_upgrade
     maintenance = "heroku maintenance:off -a #{@app_name}"
-    schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
-    capture = "heroku pg:backups capture -a #{@app_name}" 
-
     maint_result = open3_capture(maintenance)
     puts maint_result[1].green
-    cap_result = open3_capture(schedule)
-    puts cap_result[0].green
-    sched_result = open3_capture(capture)
-    puts sched_result[0].green
+    schedule_and_capture    
     puts "database upgrade complete.".cyan
     @state.finalized = true
+  end
+
+  def clean_schedules
+    get_schedules
+    puts "cleaning up backup schedule(s)..."
+    @schedules.each do |schedule| 
+      next if schedule.include?("DATABASE_URL")
+      sched = schedule.slice(/HEROKU\w+/)
+      pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3("heroku pg:backups unschedule #{sched} -a #{@app_name}")}
+      if status.success?
+        puts "#{schedule} removed"     
+      else
+        puts "Error: ".red + "#{stderr}"
+      end
+    end
+    get_schedules
+  end
+  
+  def schedule_and_capture
+    pg_schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
+    pg_capture = "heroku pg:backups capture -a #{@app_name}" 
+    sched_result = open3_capture(pg_schedule)
+    puts sched_result[0].green
+    cap_result = open3_capture(pg_capture)
+    puts cap_result[0].green
   end
 
   def open3_capture(url)
