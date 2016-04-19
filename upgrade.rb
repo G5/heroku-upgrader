@@ -48,7 +48,7 @@ def database_upgrade_menu
       create_addon_type
     when "3"
       addon_copy
-      addon_promote if @state.addon_created
+      addon_promote if @state.addon_copied
       pg_info
     when "4"
       finalize_upgrade
@@ -63,7 +63,7 @@ end
 def create_addon_type
     choice = ""
     puts "This creates the addon the current database will copy into and then this will get promoted:"
-    puts "Upgrade to " + "(B)asic $9/mo ".green + "OR " + "(S)tandard-0 $50/mo ".red + "(F)ree ".cyan + "plan for testing."
+    puts "Upgrade to " + "(B)asic $9/mo ".green + "OR " + "(S)tandard-0 $50/mo ".red + "OR " + "(F)ree ".cyan + "plan for testing."
     puts ""
     choice = gets.chomp.to_s.downcase
     if choice == "b"
