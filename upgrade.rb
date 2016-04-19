@@ -63,13 +63,17 @@ end
 def create_addon_type
     choice = ""
     puts "This creates the addon the current database will copy into and then this will get promoted:"
-    puts "Upgrade to " + "(B)".green + "asic $9/mo" + " OR " + "(S)".red + "tandard $50/mo"
+    puts "Upgrade to " + "(B)asic $9/mo ".green + "OR " + "(S)tandard-0 $50/mo ".red + "(F)ree ".cyan + "plan for testing."
+    puts ""
     choice = gets.chomp.to_s.downcase
     if choice == "b"
       addon_url = "heroku addons:create heroku-postgresql:hobby-basic -a #{@app_name}"
       create_addon(addon_url)
-    elsif choice == "s"
+    elsif choice == "f"
       addon_url = "heroku addons:create heroku-postgresql:hobby-dev -a #{@app_name}"
+      create_addon(addon_url)
+    elsif choice == "s"
+      addon_url = "heroku addons:create heroku-postgresql:standard-0 -a #{@app_name}"
       create_addon(addon_url)
     else
       puts "Canceling create addon, invalid choice."
