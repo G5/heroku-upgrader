@@ -11,7 +11,7 @@ module App
     puts "Joining #{@app_name}..."
     join_url = "heroku join -a #{@app_name}"
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(join_url)}
-    if status.success?
+    if status.success? or stderr.include? "already a collaborator"
       puts "Joined #{@app_name} successfully".green
       @state.joined = true
     else
