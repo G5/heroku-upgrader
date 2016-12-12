@@ -85,11 +85,11 @@ module App
 
   def get_schedules
     puts "getting backup schedule(s)..."
-    get_pg_url = "heroku pg:backups schedules -a #{@app_name}"
+    get_pg_url = "heroku pg:backups:schedules -a #{@app_name}"
     pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3(get_pg_url)}
     if status.success?
       @schedules = pg_info.split("\n") ; @schedules.shift
-      puts "-=[Heroku pg:backups schedules for " + "#{@app_name}".cyan + "]=-"
+      puts "-=[Heroku pg:backups:schedules for " + "#{@app_name}".cyan + "]=-"
       @schedules.each { |s| puts s.green } ; puts ""     
     else
       puts "Error: ".red + "#{stderr}"
@@ -102,7 +102,7 @@ module App
     @schedules.each do |schedule| 
       next if schedule.include?("DATABASE_URL")
       sched = schedule.slice(/HEROKU\w+/)
-      pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3("heroku pg:backups unschedule #{sched} -a #{@app_name}")}
+      pg_info, stderr, status = Bundler.with_clean_env {Open3.capture3("heroku pg:backups:unschedule #{sched} -a #{@app_name}")}
       if status.success?
         puts "#{schedule} " + "Removed".green
       else
@@ -114,8 +114,8 @@ module App
   end
   
   def schedule_and_capture
-    pg_schedule = "heroku pg:backups schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
-    pg_capture = "heroku pg:backups capture -a #{@app_name}" 
+    pg_schedule = "heroku pg:backups:schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
+    pg_capture = "heroku pg:backups:capture -a #{@app_name}" 
     sched_result = open3_capture(pg_schedule)
     puts "#{sched_result[0]}".green + " as" + " DATABASE_URL".green
     cap_result = open3_capture(pg_capture)

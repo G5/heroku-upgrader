@@ -1,5 +1,5 @@
 Dir[File.join(Dir.pwd) + "/lib/**/*.rb"].each { |file| require file if !file.include?("upgrade.rb") }
-require 'pry'
+#require 'pry'
 require 'dotenv'
 require 'open3'
 require 'Bundler'
