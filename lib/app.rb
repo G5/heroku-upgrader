@@ -56,7 +56,7 @@ module App
   def addon_copy
     wait = "heroku pg:wait -a #{@app_name}"
     maintenance = "heroku maintenance:on -a #{@app_name}"
-    pg_copy = "heroku pg:copy DATABASE_URL #{@addon_color} --confirm #{@app_name}"
+    pg_copy = "heroku pg:copy DATABASE_URL #{@addon_color} --confirm #{@app_name} --app #{@app_name}"
 
     puts "putting database in wait state...".green
     open3_capture(wait)
@@ -64,7 +64,7 @@ module App
     open3_capture(maintenance)
     puts "copying DATABASE_URL to new addon #{@addon_color}...".green
     copy_result = open3_capture(pg_copy)
-    copy_result[0].include?("Copy completed") ? (@state.addon_copied = true) : (puts "Addon copy failed.")
+    copy_result[1].include?("Copying... done") ? (@state.addon_copied = true) : (puts "Addon copy failed.")
   end 
 
   def addon_promote
@@ -117,9 +117,9 @@ module App
     pg_schedule = "heroku pg:backups:schedule --at '02:00 America/Los_Angeles' DATABASE_URL --app #{@app_name}"
     pg_capture = "heroku pg:backups:capture -a #{@app_name}" 
     sched_result = open3_capture(pg_schedule)
-    puts "#{sched_result[0]}".green + " as" + " DATABASE_URL".green
     cap_result = open3_capture(pg_capture)
-    puts cap_result[0].green
+    puts sched_result[1].green    
+    puts cap_result[1].green
   end
 
   def open3_capture(url)
