@@ -3,8 +3,10 @@ This is a ruby console application. You must have ruby installed and be able to 
 There are a few steps to run this:
 1. Clone the repository
 2. Heroku will need to authenticate, so you must setup your heroku account api token. Put this in the .env file in your application root directory.
+```
 HEROKU_BIN_PATH=heroku
 HEROKU_AUTH_TOKEN=some_token
+```
 
 To start the program:
 $ ruby upgrade.rb
